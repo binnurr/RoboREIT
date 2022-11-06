@@ -2,7 +2,7 @@
 RoboREIT: an Interactive Robotic Tutor with Instructive Feedback Component for Requirements Elicitation Interview Training
 
 Download chrome driver from https://chromedriver.chromium.org/downloads
-
+Download and install naoqi http://doc.aldebaran.com/2-8/dev/python/install_guide.html
 
 **License**
 
