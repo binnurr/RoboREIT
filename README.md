@@ -1,6 +1,8 @@
 # RoboREIT
 RoboREIT: an Interactive Robotic Tutor with Instructive Feedback Component for Requirements Elicitation Interview Training
 
+Download chrome driver from https://chromedriver.chromium.org/downloads
+
 
 **License**
 
