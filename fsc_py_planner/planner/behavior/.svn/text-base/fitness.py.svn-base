@@ -1,0 +1,278 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+from planner.fsc import FSC
+from planner.state import State
+from planner.transition.time_elapsed_t import TimeElapsedT
+from planner.transition.static_motion_done_t import StaticMotionDoneT
+from planner.transition.ros_msg_t import RosMsgT
+from planner.transition.speech_done_t import SpeechDoneT
+from planner.transition.always_true_t import AlwaysTrueT
+from planner.transition.speech_recognized_t import SpeechRecognizedT
+
+from planner.action.static_motion_act import StaticMotionAct
+from planner.action.say_text_act import SayTextAct
+from planner.action.send_ros_msg_act import SendRosMsgAct
+from planner.action.say_ros_msg_act import SayRosMsgAct
+
+class Fitness(FSC):
+    
+    @staticmethod
+    def get_name():
+        return 'fitness'
+    
+    # constructor
+    def __init__(self, robot, name):
+        
+        # call base classes constructor
+        FSC.__init__(self, robot, name)
+        
+        # define a behavior here
+        
+        # define states
+        s_wait_for_calibration = State("s_wait_for_calibration")
+        self.states.append(s_wait_for_calibration)
+        
+        s_wait_for_user = State("s_wait_for_user")
+        self.states.append(s_wait_for_user)
+        
+        s_wait_for_speech = State("s_wait_for_speech")
+        self.states.append(s_wait_for_speech)
+        
+        s_explain_motion_1 = State("s_explain_motion1")
+        self.states.append(s_explain_motion_1)
+        
+        s_play_motion_1 = State("s_play_motion1")
+        self.states.append(s_play_motion_1)
+        
+        s_play_1_end = State("s_play_1_end")
+        self.states.append(s_play_1_end)
+        
+        s_explain_motion_2 = State("s_explain_motion2")
+        self.states.append(s_explain_motion_2)
+        
+        s_play_motion_2 = State("s_play_motion2")
+        self.states.append(s_play_motion_2)
+        
+        s_play_2_end = State("s_play_2_end")
+        self.states.append(s_play_2_end)
+        
+        s_explain_motion_3 = State("s_explain_motion3")
+        self.states.append(s_explain_motion_3)
+        
+        s_play_motion_3 = State("s_play_motion3")
+        self.states.append(s_play_motion_3)
+        
+        s_play_3_end = State("s_play_3_end")
+        self.states.append(s_play_3_end)
+        
+        s_explain_motion_4 = State("s_explain_motion4")
+        self.states.append(s_explain_motion_4)
+        
+        s_play_motion_4 = State("s_play_motion4")
+        self.states.append(s_play_motion_4)
+        
+        s_play_4_end = State("s_play_4_end")
+        self.states.append(s_play_4_end)
+        
+        s_give_last_feedback = State("s_give_last_feedback")
+        self.states.append(s_give_last_feedback)
+        
+        s_say_last_feedback = State("s_say_last_feedback")
+        self.states.append(s_say_last_feedback)
+        
+        #s_sit_down = State("s_sit_down")
+        #self.states.append(s_sit_down)
+        
+        # define actions
+        act_say_begin = SayTextAct(robot)
+        act_say_begin.set_text('hello')
+        s_wait_for_user.add_action(act_say_begin)
+        
+        act_explain_1 = SayTextAct(robot)
+        act_explain_1.set_text('motion1')
+        s_explain_motion_1.add_action(act_explain_1)
+        
+        act_play_1 = StaticMotionAct(robot)
+        act_play_1.set_motion_name('elbeldeLEFT')
+        s_play_motion_1.add_action(act_play_1)
+        
+        act_track_motion_1 = SendRosMsgAct(robot)
+        act_track_motion_1.set_topic_and_msg('startTracking', 'elbeldeLEFT')
+        s_play_motion_1.add_action(act_track_motion_1)
+        
+        act_play_end_1 = SendRosMsgAct(robot)
+        act_play_end_1.set_topic_and_msg('stopTracking', 'elbeldeLEFT')
+        s_play_1_end.add_action(act_play_end_1)
+        
+        act_explain_2 = SayTextAct(robot)
+        act_explain_2.set_text('motion2')
+        s_explain_motion_2.add_action(act_explain_2)
+        
+        act_play_2 = StaticMotionAct(robot)
+        act_play_2.set_motion_name('elbeldeRIGHT')
+        s_play_motion_2.add_action(act_play_2)
+        
+        act_track_motion_2 = SendRosMsgAct(robot)
+        act_track_motion_2.set_topic_and_msg('startTracking', 'elbeldeRIGHT')
+        s_play_motion_2.add_action(act_track_motion_2)
+        
+        act_play_end_2 = SendRosMsgAct(robot)
+        act_play_end_2.set_topic_and_msg('stopTracking', 'elbeldeRIGHT')
+        s_play_2_end.add_action(act_play_end_2)
+        
+        act_explain_3 = SayTextAct(robot)
+        act_explain_3.set_text('motion3')
+        s_explain_motion_3.add_action(act_explain_3)
+        
+        act_play_3 = StaticMotionAct(robot)
+        act_play_3.set_motion_name('kollarOnde')
+        s_play_motion_3.add_action(act_play_3)
+        
+        act_track_motion_3 = SendRosMsgAct(robot)
+        act_track_motion_3.set_topic_and_msg('startTracking', 'kollarOnde')
+        s_play_motion_3.add_action(act_track_motion_3)
+        
+        act_play_end_3 = SendRosMsgAct(robot)
+        act_play_end_3.set_topic_and_msg('stopTracking', 'kollarOnde')
+        s_play_3_end.add_action(act_play_end_3)
+        
+        act_explain_4 = SayTextAct(robot)
+        act_explain_4.set_text('motion4')
+        s_explain_motion_4.add_action(act_explain_4)
+        
+        act_play_4 = StaticMotionAct(robot)
+        act_play_4.set_motion_name('kollarDirsekte')
+        s_play_motion_4.add_action(act_play_4)
+        
+        act_track_motion_4 = SendRosMsgAct(robot)
+        act_track_motion_4.set_topic_and_msg('startTracking', 'kollarDirsekte')
+        s_play_motion_4.add_action(act_track_motion_4)
+        
+        act_play_end_4 = SendRosMsgAct(robot)
+        act_play_end_4.set_topic_and_msg('stopTracking', 'kollarDirsekte')
+        s_play_4_end.add_action(act_play_end_4)
+        
+        act_give_overall_feedback = SendRosMsgAct(robot)
+        act_give_overall_feedback.set_topic_and_msg('overallFeedback', 'giveFeedback')
+        s_give_last_feedback.add_action(act_give_overall_feedback)
+        
+        act_inform_about_processing = SayTextAct(robot)
+        act_inform_about_processing.set_text('end')
+        s_give_last_feedback.add_action(act_inform_about_processing)
+        
+        act_say_overall_feedback = SayRosMsgAct(robot)
+        act_say_overall_feedback.set_topic('giveFeedback')
+        s_say_last_feedback.add_action(act_say_overall_feedback)
+        s_play_motion_1.add_action(act_say_overall_feedback)
+        s_play_motion_2.add_action(act_say_overall_feedback)
+        s_play_motion_3.add_action(act_say_overall_feedback)
+        s_play_motion_4.add_action(act_say_overall_feedback)
+        
+        #act_crouch = SitdownAct(robot)
+        #okan
+        #s_say_last_feedback.add_action(act_crouch)
+        #s_sit_down.add_action(act_crouch)
+        
+        #define transitions
+        t_calibration = RosMsgT(self, robot)
+        t_calibration.set_topic_and_value('userCalibrated', '')
+        t_calibration.set_any_value(True)
+        t_calibration.set_target_state(s_wait_for_user)
+        s_wait_for_calibration.add_transition(t_calibration)
+        
+        t_say_waiting = SpeechDoneT(self, robot)
+        t_say_waiting.set_target_state(s_wait_for_speech)
+        s_wait_for_user.add_transition(t_say_waiting)
+        
+        #t_speech_begin = SpeechRecognizedT(self, robot)
+        #t_speech_begin.set_words(['ready'])
+        #t_speech_begin.set_target_state(s_explain_motion_1)
+        #s_wait_for_speech.add_transition(t_speech_begin)
+#         t_speech_begin = RosMsgT(self, robot)
+#         t_speech_begin.set_topic_and_value('speech_done_woz','')
+#         t_speech_begin.set_any_value(True)
+#         t_speech_begin.set_target_state(s_explain_motion_1)
+#         s_wait_for_speech.add_transition(t_speech_begin)
+        t_speech_begin = TimeElapsedT(self, robot)
+        t_speech_begin.set_elapsed_time(4.0) # wait for 4 seconds
+        t_speech_begin.set_target_state(s_explain_motion_1)
+        s_wait_for_speech.add_transition(t_speech_begin)
+        
+        t_speech_fail = TimeElapsedT(self, robot)
+        t_speech_fail.set_elapsed_time(7.0) # wait for 7 seconds
+        t_speech_fail.set_target_state(s_wait_for_user)
+        s_wait_for_speech.add_transition(t_speech_fail)
+        
+        # add speech done transitions
+        t_explain_1 = SpeechDoneT(self, robot)
+        t_explain_1.set_target_state(s_play_motion_1)
+        s_explain_motion_1.add_transition(t_explain_1)
+        
+        t_explain_2 = SpeechDoneT(self, robot)
+        t_explain_2.set_target_state(s_play_motion_2)
+        s_explain_motion_2.add_transition(t_explain_2)
+        
+        t_explain_3 = SpeechDoneT(self, robot)
+        t_explain_3.set_target_state(s_play_motion_3)
+        s_explain_motion_3.add_transition(t_explain_3)
+        
+        t_explain_4 = SpeechDoneT(self, robot)
+        t_explain_4.set_target_state(s_play_motion_4)
+        s_explain_motion_4.add_transition(t_explain_4)
+        
+        # add motion done transitions
+        t_play_1 = StaticMotionDoneT(self, robot)
+        t_play_1.set_target_state(s_play_1_end)
+        s_play_motion_1.add_transition(t_play_1)
+        
+        t_play_2 = StaticMotionDoneT(self, robot)
+        t_play_2.set_target_state(s_play_2_end)
+        s_play_motion_2.add_transition(t_play_2)
+        
+        t_play_3 = StaticMotionDoneT(self, robot)
+        t_play_3.set_target_state(s_play_3_end)
+        s_play_motion_3.add_transition(t_play_3)
+        
+        t_play_4 = StaticMotionDoneT(self, robot)
+        t_play_4.set_target_state(s_play_4_end)
+        s_play_motion_4.add_transition(t_play_4)
+        
+        t_wait_for_feedback = RosMsgT(self, robot)
+        t_wait_for_feedback.set_any_value(True)
+        t_wait_for_feedback.set_topic_and_value('giveFeedback', '')
+        t_wait_for_feedback.set_target_state(s_say_last_feedback)
+        s_give_last_feedback.add_transition(t_wait_for_feedback)
+        
+        # add transitions to go directly from motion_end to next motion explanation
+        t_wait_msg_end_1 = RosMsgT(self, robot)
+        t_wait_msg_end_1.set_topic_and_value('userCalibrated', '')
+        t_wait_msg_end_1.set_any_value(True)
+        # okan
+        t_wait_msg_end_1.set_target_state(s_explain_motion_2)
+        #t_wait_msg_end_1.set_target_state(s_sit_down)
+        s_play_1_end.add_transition(t_wait_msg_end_1)
+        
+        t_wait_msg_end_2 = RosMsgT(self, robot)
+        t_wait_msg_end_2.set_topic_and_value('userCalibrated', '')
+        t_wait_msg_end_2.set_any_value(True)
+        t_wait_msg_end_2.set_target_state(s_explain_motion_3)
+        s_play_2_end.add_transition(t_wait_msg_end_2)
+        
+        t_wait_msg_end_3 = RosMsgT(self, robot)
+        t_wait_msg_end_3.set_topic_and_value('userCalibrated', '')
+        t_wait_msg_end_3.set_any_value(True)
+        t_wait_msg_end_3.set_target_state(s_explain_motion_4)
+        s_play_3_end.add_transition(t_wait_msg_end_3)
+        
+        t_wait_msg_end_4 = RosMsgT(self, robot)
+        t_wait_msg_end_4.set_topic_and_value('userCalibrated', '')
+        t_wait_msg_end_4.set_any_value(True)
+        t_wait_msg_end_4.set_target_state(s_give_last_feedback)
+        s_play_4_end.add_transition(t_wait_msg_end_4)
+        
+        self.set_initial_state(s_wait_for_calibration)
+        

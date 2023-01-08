@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition
+END
+transition.py
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/transition.py
+END
+face_detection.py
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/face_detection.py
+END
+ros_msg_t.py
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/ros_msg_t.py
+END
+time_elapsed_t.py
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/time_elapsed_t.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/__init__.py
+END
+speech_done_t.py
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/speech_done_t.py
+END
+always_true_t.py
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/always_true_t.py
+END
+speech_recognized_t.py
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/speech_recognized_t.py
+END
+static_motion_done_t.py
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/transition/static_motion_done_t.py
+END

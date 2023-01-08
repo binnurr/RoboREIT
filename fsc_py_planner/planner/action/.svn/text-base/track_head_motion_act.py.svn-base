@@ -1,0 +1,23 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+from planner.action.action import Action
+
+class TrackHeadMotionAct(Action):
+    
+    #constructor
+    def __init__(self, robot):
+        Action.__init__(self, robot)
+    
+    def init(self):
+        self.robot.disable_static_motion_joint_names(["HeadYaw","HeadPitch"])
+       
+    def step(self):
+        self.robot.track_face()
+    
+    def finalize(self):
+        pass
+    

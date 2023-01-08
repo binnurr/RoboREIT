@@ -1,0 +1,48 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+from planner.transition.transition import Transition
+from std_msgs.msg import String
+
+class RosMsgT(Transition):
+    
+    def __init__(self, fsc, robot):
+        Transition.__init__(self, fsc, robot)
+        self.any_value = False
+        self.topic_name = None
+        self.expected_value = None
+        
+        self.message_ok = False
+    
+    # override only init method and condition method
+    def init(self):
+        self.message_ok = False
+        
+    def condition(self):
+        if (self.message_ok):
+            return True
+        else:
+            return False
+        
+    def set_topic_and_value(self, topic, expected_value):
+        self.topic_name = topic
+        self.expected_value = expected_value
+        
+        # connect to ROS
+        self.robot.rospy.Subscriber(self.topic_name, String, self.message_callback)
+        
+    def set_any_value(self, enabled):
+        self.any_value = enabled
+        
+    def message_callback(self, msg):
+        print 'ros_msg_t::message_callback msg: ' + str(msg.data)
+        if (self.any_value):
+            self.message_ok = True
+        else:
+            if (msg.data == self.expected_value):
+                self.message_ok = True
+        
+        

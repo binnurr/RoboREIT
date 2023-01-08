@@ -1,0 +1,256 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+from naoqi import ALProxy
+from naoqi import ALBroker
+from threading import Thread
+import time
+
+# a high level class to provide communication between all robot modules and the planner
+class Robot():
+    
+    # constructor
+    def __init__(self, rospy):
+        
+        self.rospy = rospy
+        
+        # set parameters
+        self.naoqi_ip = self.rospy.get_param("~naoqi_ip", "127.0.0.1")
+        
+        # write joint names as the same order of motion file
+        self.joint_names = ["HeadYaw","HeadPitch","LShoulderPitch","LShoulderRoll","LElbowYaw","LElbowRoll","RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll","LHipYawPitch","LHipRoll","LHipPitch","LKneePitch","LAnklePitch","LAnkleRoll","RHipYawPitch","RHipRoll","RHipPitch", "RKneePitch","RAnklePitch","RAnkleRoll"]
+        
+        self.mem_proxy = None
+        self.sensor_suffix = "/Position/Sensor/Value"
+        self.sensor_prefix = "Device/SubDeviceList/"
+        
+        self.motion_manager_proxy = None
+        self.speech_proxy = None
+        self.face_proxy = None
+        
+        self.say_text_thread = None
+        
+        self.say_finished = True
+        
+        self.sound_file_ids = {}
+
+        self.init_naoqi_proxies()
+        
+        
+#         self.init_event_listener()
+            
+    def init_naoqi_proxies(self):
+        self.motion_manager_proxy = ALProxy("MotionManager", self.naoqi_ip, 9559)
+        
+        # init memory proxy to read sensor values
+        self.mem_proxy = ALProxy("ALMemory", self.naoqi_ip, 9559)
+        
+        try:
+            self.face_proxy = ALProxy("ALFaceDetection", self.naoqi_ip, 9559)
+            period = 500
+            face_proxy.subscribe("Test_Face", period, 0.0)
+        except Exception, e:
+            print "Error when creating face detection proxy:"
+            print str(e)
+        
+        # init text to speech module
+        try:
+            self.speech_proxy = ALProxy("ALTextToSpeech", self.naoqi_ip, 9559)
+            self.audio_proxy = ALProxy("ALAudioPlayer", self.naoqi_ip, 9559)
+            # load sound files
+            self.load_sound_files()
+        except:
+            pass
+    
+    def load_sound_files(self):
+        sound_file_name = '/home/binnur/robotics/fuerte-ws/NaoMotionManager/sounds/sounds_tur.txt'
+        filePrefix = '/home/nao/binnur/sound/'
+        fileExt = '.wav'
+         
+        sounds_file = open(sound_file_name)
+         
+        for line in sounds_file:
+            splitlines = line.split('-')
+            audioFileName = filePrefix + splitlines[0] + fileExt
+            text = splitlines[1].rstrip('\n')
+            self.speech_proxy.setLanguage('Turkish')
+            self.speech_proxy.sayToFile(text, audioFileName)
+        
+        sounds_file = open(sound_file_name)
+        
+        for line in sounds_file:
+            splitlines = line.split('-')
+            audioFileName = filePrefix + splitlines[0] + fileExt
+            text = splitlines[1].rstrip('\n')
+            fileId = self.audio_proxy.loadFile(audioFileName)
+            self.sound_file_ids[splitlines[0]] = fileId
+        
+#     def init_event_listener(self):
+# #         pass
+#         self.event_thread_run()
+# #         self.event_listener_thread = Thread(target=self.event_thread_run)
+# #         self.event_listener_thread.start()
+    
+#     def event_thread_run(self):
+#         print 'event thread run'
+#         global myBroker
+#         myBroker = ALBroker("robotBroker", "0.0.0.0", 0, self.naoqi_ip, 9559)
+#         global EventListener
+#         EventListener = EventListenerModule("EventListener")
+#         try:
+#             while(True):
+#                 time.sleep(0.033)
+#         except KeyboardInterrupt:
+#             myBroker.shutdown()
+    
+#     def register_event(self, event_name, callback):
+#         pass
+#         global EventListener
+#         print 'register event: ' + event_name 
+#         if (EventListener != None):
+#             print 'register event: ' + event_name + ' ok.'
+#             EventListener.register_for_event(event_name, callback)
+#         else:
+#             while(EventListener == None):
+#                 self.register_event(event_name, callback)
+#                 time.sleep(0.1)
+#                 print 'trying to register'
+
+    def track_face(self):
+        memValue = "FaceDetected"
+        val = mem_proxy.getData(memValue)
+        # Check whether we got a valid output.
+        if(val and isinstance(val, list) and len(val) >= 2):
+
+            # We detected faces !
+            # For each face, we can read its shape info and ID.
+
+            # First Field = TimeStamp.
+            timeStamp = val[0]
+
+            # Second Field = array of face_Info's.
+            faceInfoArray = val[1]
+
+            try:
+                # Browse the faceInfoArray to get info on each detected face.
+                for j in range( len(faceInfoArray)-1 ):
+                    faceInfo = faceInfoArray[j]
+
+                    # First Field = Shape info.
+                    faceShapeInfo = faceInfo[0]
+
+                    # Second Field = Extra info (empty for now).
+                    faceExtraInfo = faceInfo[1]
+                    
+                    self.set_angles(["HeadYaw","HeadPitch"],[yaw,pitch],100)
+                    print "  alpha %.3f - beta %.3f" % (faceShapeInfo[1], faceShapeInfo[2])
+                    print "  width %.3f - height %.3f" % (faceShapeInfo[3], faceShapeInfo[4])
+
+            except Exception, e:
+                print "faces detected, but it seems getData is invalid. ALValue ="
+                print val
+                print "Error msg %s" % (str(e))
+        else:
+            print "No face detected"
+
+    def release_stiffness(self):
+        self.motion_manager_proxy.setStiffness(['Body'], [0.0])
+        
+        
+    def get_sensor_values(self, sensor_names):
+        full_sensor_names = []
+        # get the correct key names
+        for name in sensor_names:
+            full_sensor_names.append(self.sensor_prefix + name + self.sensor_suffix)
+        
+        return self.mem_proxy.getListData(full_sensor_names)
+        
+    def disable_static_motion_joint_names(self, names):
+        enabled = [];
+        for joint_name in names:
+            enabled.append(False)
+        self.motion_manager_proxy.setEnabledJoints(names, enabled)
+            
+    def enable_static_motion_joint_names(self,names):
+        enabled = [];
+        for joint_name in names:
+            enabled.append(True)
+        self.motion_manager_proxy.setEnabledJoints(names, enabled)
+            
+    def run_static_motion(self, motion_name):
+        self.motion_manager_proxy.runStaticMotion(motion_name)
+    
+    def reset_current_static_motion(self):
+        self.motion_manager_proxy.resetCurrentStaticMotion()
+        
+    def stop_current_static_motion(self):
+        self.motion_manager_proxy.stopCurrentStaticMotion()
+        
+    def is_static_motion_finished(self):
+        return self.motion_manager_proxy.isStaticMotionFinished()
+            
+    def set_angles(self, names, angles, duration):
+        self.motion_manager_proxy.setAngles(names, angles, duration)
+        
+    def goto_posture(self, posture_name):
+        self.motion_manager_proxy.goToPosture(posture_name)
+        
+    def say_text(self, text):
+        try:
+            if (self.say_text_thread != None):
+                self.say_text_thread.join(0.1)
+            self.say_finished = False
+            self.speech_proxy.stopAll()
+            self.say_text_thread = Thread(target=self.say_text_thread_func, args=[text])
+            self.say_text_thread.start()
+        except:
+            pass
+        
+    def say_text_thread_func(self, text):
+        # we cannot file audio file run speech to text
+        if (not text in self.sound_file_ids.keys()):
+            self.speech_proxy.say(text)
+        else:
+            self.audio_proxy.play(self.sound_file_ids[text])
+        self.say_finished = True
+        
+    def is_say_finished(self):
+        return self.say_finished
+        
+    def get_memory_data(self, key):
+        return self.mem_proxy.getData(key)
+    
+    def killall(self):
+        #self.faceProxy.unsubscribe("Test_Face")
+        self.stop_current_static_motion()
+        self.reset_current_static_motion()
+        sit_angles = [0.0,0.0,                     # head
+            1.545, 0.33, -1.57, -0.486,            # left arm
+            -0.3, 0.057, -0.744, 2.192, -1.122, -0.035,         # left leg
+            -0.3, 0.057, -0.744, 2.192, -1.122, -0.035,        # right leg
+            1.545, -0.33, 1.57, 0.486]            # right arm
+        nao_names=["HeadYaw","HeadPitch","LShoulderPitch","LShoulderRoll","LElbowYaw","LElbowRoll","LHipYawPitch","LHipRoll","LHipPitch","LKneePitch","LAnklePitch","LAnkleRoll","RHipYawPitch","RHipRoll","RHipPitch","RKneePitch","RAnklePitch","RAnkleRoll","RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll"]
+        self.set_angles(nao_names, sit_angles, 3500)
+        time.sleep(3.5)
+        self.release_stiffness()
+        time.sleep(1.0)
+        self.motion_manager_proxy = None
+        self.speech_proxy = None
+        self.face_proxy = None
+        self.mem_proxy = None
+        
+          
+        
+        
+        
+        
+        
+            
+            
+        
+    
+    
+        

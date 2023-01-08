@@ -1,0 +1,49 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+from robot.robot import Robot
+from behavior.my_test import MyTest
+from behavior.action_test import ActionTest
+from behavior.event_test import EventTest
+from behavior.fitness import Fitness
+from behavior.speech_recognition_test import SpeechRecognitionTest
+from behavior.fitnessSitDown import FitnessSitDown
+
+class FSCPlanner():
+    
+    # constructor
+    def __init__(self):
+        self.robot = None
+        self.current_fsc = None
+        
+    # load the given fsc
+    def load_fsc(self, fsc_name):
+        print("load fsc " + fsc_name)
+        
+        if (fsc_name == MyTest.get_name()):
+            self.current_fsc = MyTest(self.robot, "my_test")
+        elif (fsc_name == ActionTest.get_name()):
+            self.current_fsc = ActionTest(self.robot, "action_test")
+        elif (fsc_name == EventTest.get_name()):
+            self.current_fsc = EventTest(self.robot, "event_test")
+        elif (fsc_name == Fitness.get_name()):
+            self.current_fsc = Fitness(self.robot, "fitness")
+        elif (fsc_name == FitnessSitDown.get_name()):
+            self.current_fsc = FitnessSitDown(self.robot, "fitnessSitDown")
+        elif (fsc_name == SpeechRecognitionTest.get_name()):
+            self.current_fsc = SpeechRecognitionTest(self.robot, "speech_recognition_test")
+        
+        
+    # run the current fsc
+    def run(self):
+        
+        if (self.current_fsc):
+            self.current_fsc.run()
+            
+    def set_robot(self, robot):
+        self.robot = robot
+        
+        

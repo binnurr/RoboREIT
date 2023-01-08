@@ -1,0 +1,58 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+from planner.fsc import FSC
+from planner.state import State
+from planner.transition.time_elapsed_t import TimeElapsedT
+
+class MyTest(FSC):
+    
+    @staticmethod
+    def get_name():
+        return 'my_test'
+    
+    # constructor
+    def __init__(self, robot, name):
+        
+        # call base classes constructor
+        FSC.__init__(self, robot, name)
+        
+        # define a behavior here
+        state1 = State("state1")
+        self.states.append(state1)
+        state2 = State("state2")
+        self.states.append(state2)
+        state3 = State("state3")
+        self.states.append(state3)
+        
+        #define transitions
+        time_elapsed1_2 = TimeElapsedT(self, robot)
+        time_elapsed1_2.name = "1_2"
+        
+        time_elapsed1_2.set_elapsed_time(2.0)
+        time_elapsed1_2.set_target_state(state2)
+        state1.add_transition(time_elapsed1_2)
+        
+        time_elapsed2_3 = TimeElapsedT(self, robot)
+        time_elapsed2_3.name = "2_3"
+        
+        time_elapsed2_3.set_elapsed_time(5.0)
+        time_elapsed2_3.set_target_state(state3)
+        state2.add_transition(time_elapsed2_3)
+        
+        time_elapsed3_1 = TimeElapsedT(self, robot)
+        time_elapsed3_1.name = "3_1"
+        
+        time_elapsed3_1.set_elapsed_time(3.0)
+        time_elapsed3_1.set_target_state(state1)
+        state3.add_transition(time_elapsed3_1)
+        
+        # define actions here
+        
+        
+        self.set_initial_state(state1)
+        
+        

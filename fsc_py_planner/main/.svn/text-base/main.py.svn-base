@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+# ros imports
+import roslib
+roslib.load_manifest('fsc_py_planner')
+import rospy
+
+# import for robot
+from robot.robot import Robot
+
+# planner imports
+from planner.fsc_planner import FSCPlanner
+
+if __name__ == '__main__':
+    
+    # init ros node
+    rospy.init_node("py_planner", anonymous=True)
+    
+    #behavior_name = rospy.get_param("~behavior_name", "fitness")
+    behavior_name = rospy.get_param("~behavior_name", "fitnessSitDown")
+    
+    # create robot class to manage whole robotic stuff
+    # such as handling naoqi connection and other ros nodes
+    robot = Robot(rospy)
+    
+    
+    
+    # create planner
+    planner = FSCPlanner()
+    planner.set_robot(robot)
+    planner.load_fsc(behavior_name)
+    
+    # set loop frequency
+    rate = rospy.Rate(10) #0.1Hz
+    # control loop
+    while(not rospy.is_shutdown()):
+        planner.run()
+        rate.sleep()
+    
+    robot.killall()
+    
+    

@@ -1,0 +1,46 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+# -*- coding: utf-8 -*- 
+
+from planner.fsc import FSC
+from planner.state import State
+from planner.transition.speech_recognized_t import SpeechRecognizedT
+
+class SpeechRecognitionTest(FSC):
+    
+    @staticmethod
+    def get_name():
+        return 'speech_recognition_test'
+    
+    # constructor
+    def __init__(self, robot, name):
+        
+        # call base classes constructor
+        FSC.__init__(self, robot, name)
+        
+        # define a behavior here
+        state_listen = State("state_listen")
+        self.states.append(state_listen)
+        state_yes = State("state_yes")
+        self.states.append(state_yes)
+        state_no = State("state_no")
+        self.states.append(state_no)
+        
+        #define transitions
+        tran_yes = SpeechRecognizedT(self, robot)
+        tran_yes.set_words('yes')
+        tran_yes.set_target_state(state_yes)
+        state_listen.add_transition(tran_yes)
+        
+        tran_no = SpeechRecognizedT(self, robot)
+        tran_no.set_words('no')
+        tran_no.set_target_state(state_no)
+        state_listen.add_transition(tran_no)
+        
+        # define actions here
+        
+        self.set_initial_state(state_listen)
+        

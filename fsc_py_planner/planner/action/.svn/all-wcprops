@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action
+END
+static_motion_act.py
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/static_motion_act.py
+END
+head_test_act.py
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/head_test_act.py
+END
+say_text_act.py
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/say_text_act.py
+END
+send_ros_msg_act.py
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/send_ros_msg_act.py
+END
+say_ros_msg_act.py
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/say_ros_msg_act.py
+END
+action.py
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/action.py
+END
+sitdown_act.py
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/sitdown_act.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/__init__.py
+END
+track_head_motion_act.py
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/action/track_head_motion_act.py
+END

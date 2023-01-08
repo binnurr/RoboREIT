@@ -1,0 +1,43 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+from planner.fsc import FSC
+from planner.state import State
+from planner.transition.time_elapsed_t import TimeElapsedT
+from planner.transition.static_motion_done_t import StaticMotionDoneT
+
+from planner.action.static_motion_act import StaticMotionAct
+
+class EventTest(FSC):
+    
+    @staticmethod
+    def get_name():
+        return 'event_test'
+    
+    # constructor
+    def __init__(self, robot, name):
+        
+        # call base classes constructor
+        FSC.__init__(self, robot, name)
+        
+        # define a behavior here
+        state1 = State("state1")
+        self.states.append(state1)
+        state2 = State("state2")
+        self.states.append(state2)
+        
+        #define transitions
+        motion_done = StaticMotionDoneT(self, robot)
+        motion_done.set_target_state(state2)
+        state1.add_transition(motion_done)
+        
+        # define actions here
+        static_motion_action = StaticMotionAct(robot)
+        static_motion_action.set_motion_name("elbeldeLEFT")
+        state1.add_action(static_motion_action)
+        
+        self.set_initial_state(state1)
+        

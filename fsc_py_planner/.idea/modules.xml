@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../FaceChannel-master/.idea/FaceChannel.iml" filepath="$PROJECT_DIR$/../../FaceChannel-master/.idea/FaceChannel.iml" />
+      <module fileurl="file://$USER_HOME$/PycharmProjects/TempProjects/.idea/TempProjects.iml" filepath="$USER_HOME$/PycharmProjects/TempProjects/.idea/TempProjects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../emotional-manager-master/.idea/emotional-manager-master.iml" filepath="$PROJECT_DIR$/../emotional-manager-master/.idea/emotional-manager-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../eval_feedback_CD/.idea/eval_feedback_CD.iml" filepath="$PROJECT_DIR$/../eval_feedback_CD/.idea/eval_feedback_CD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/fsc_py_planner.iml" filepath="$PROJECT_DIR$/.idea/fsc_py_planner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../nao_voice_active_detection/.idea/nao_voice_active_detection.iml" filepath="$PROJECT_DIR$/../nao_voice_active_detection/.idea/nao_voice_active_detection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../rqt_rerobot_gui/.idea/rqt_rerobot_gui.iml" filepath="$PROJECT_DIR$/../rqt_rerobot_gui/.idea/rqt_rerobot_gui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../test_RE_experiment/.idea/test_RE_experiment.iml" filepath="$PROJECT_DIR$/../test_RE_experiment/.idea/test_RE_experiment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../visu_ros_msg/.idea/visu_ros_msg.iml" filepath="$PROJECT_DIR$/../visu_ros_msg/.idea/visu_ros_msg.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/behavior
+END
+action_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/behavior/action_test.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/behavior/__init__.py
+END
+event_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/behavior/event_test.py
+END
+fitnessSitDown.py
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/behavior/fitnessSitDown.py
+END
+my_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/behavior/my_test.py
+END
+speech_recognition_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/behavior/speech_recognition_test.py
+END
+fitness.py
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/BOUNRobotics/!svn/ver/4767/branches/binnur/fuerte_ws/fsc_py_planner/src/planner/behavior/fitness.py
+END

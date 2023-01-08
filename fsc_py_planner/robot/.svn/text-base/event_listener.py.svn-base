@@ -1,0 +1,124 @@
+'''
+Created on Aug 4, 2013
+
+@author: okan
+'''
+
+import sys
+import time
+
+from naoqi import ALProxy
+from naoqi import ALModule
+from naoqi import ALBroker
+from optparse import OptionParser
+
+NAO_IP = "127.0.0.1"
+
+EventListener = None
+myBroker = None
+
+class EventListenerModule(ALModule):
+    """ A simple event listener module """
+    
+    def __init__(self, name):
+        ALModule.__init__(self, name)
+        # No need for IP and port here because
+        # we have our Python broker connected to NAOqi broker
+
+        # Subscribe to the FaceDetected event:
+        
+        memory = ALProxy("ALMemory")
+        memory.subscribeToEvent("FaceDetected", name, "on_face_detected")
+        
+        # subscribe to speech done event
+        memory.subscribeToEvent("ALTextToSpeech/TextDone", name, "on_text_done")
+        self.on_text_done_callbacks = []
+        
+        # subscribe to static motion done event
+        memory.subscribeToEvent("StaticMotionDone", name, "on_static_motion_done")
+        self.on_static_motion_done_callbacks = []
+        
+
+    def on_face_detected(self, *_args):
+        """ This will be called each time a face is detected."""
+        # Unsubscribe to the event when talking,
+        # to avoid repetitions
+#         memory.unsubscribeToEvent("FaceDetected", "HumanGreeter")
+        
+        print 'face detected'
+
+        # Subscribe again to the event
+#         memory.subscribeToEvent("FaceDetected",
+#             "HumanGreeter",
+#             "onFaceDetected")
+    def on_text_done(self, *args):
+        """ this will be called when text to speech module completes synthesis """
+        print 'text_done'
+        for callback in self.on_text_done_callbacks:
+            callback()
+    
+    def on_static_motion_done(self, *args):
+        """ this will be called when text to speech module completes synthesis """
+        print 'static motion done'
+        for callback in self.on_static_motion_done_callbacks:
+            callback()
+        
+    def register_for_event(self, event_name, callback):
+        if (event_name == 'TextDone'):
+            self.on_text_done_callbacks.append(callback)
+        elif (event_name == 'StaticMotionDone'):
+            self.on_static_motion_done_callbacks.append(callback)
+            
+
+
+def main():
+    """ Main entry point
+
+    """
+    parser = OptionParser()
+    parser.add_option("--pip",
+        help="Parent broker port. The IP address or your robot",
+        dest="pip")
+    parser.add_option("--pport",
+        help="Parent broker port. The port NAOqi is listening to",
+        dest="pport",
+        type="int")
+    parser.set_defaults(
+        pip=NAO_IP,
+        pport=9559)
+
+    (opts, args_) = parser.parse_args()
+    pip   = opts.pip
+    pport = opts.pport
+
+    # We need this broker to be able to construct
+    # NAOqi modules and subscribe to other modules
+    # The broker must stay alive until the program exists
+    myBroker = ALBroker("myBroker",
+       "0.0.0.0",   # listen to anyone
+       0,           # find a free port and use it
+       pip,         # parent broker IP
+       pport)       # parent broker port
+
+
+    # Warning: HumanGreeter must be a global variable
+    # The name given to the constructor must be the name of the
+    # variable
+    global EventListener
+    EventListener = EventListenerModule("EventListener")
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print
+        print "Interrupted by user, shutting down"
+        myBroker.shutdown()
+        sys.exit(0)
+    
+if __name__ == "__main__":
+    main()
+    
+    
+    
+        
